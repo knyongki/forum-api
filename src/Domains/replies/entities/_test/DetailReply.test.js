@@ -1,36 +1,47 @@
-class NewReply {
-  constructor(payload) {
-    this._verifyPayload(payload);
+const DetailReply = require('../DetailReply');
 
-    const {
-      commentId, owner, content,
-    } = payload;
+describe('a DetailReply entity', () => {
+  it('should throw error if payload does not meet criteria', () => {
+    // arrange
+    const payload = {
+      id: 'reply-123',
+      content: 'some reply',
+      date: '2021',
+    };
 
-    this.commentId = commentId;
-    this.owner = owner;
-    this.content = content;
-  }
+    // action & assert
+    expect(() => new DetailReply(payload)).toThrowError('DETAIL_REPLY.NOT_CONTAIN_NEEDED_PROPERTY');
+  });
 
-  _verifyPayload(payload) {
-    if (this._isPayloadNotContainNeededProperty(payload)) {
-      throw new Error('NEW_REPLY.NOT_CONTAIN_NEEDED_PROPERTY');
-    }
-    if (this._isPayloadNotMeetDataTypeSpecification(payload)) {
-      throw new Error('NEW_REPLY.NOT_MEET_DATA_TYPE_SPECIFICATION');
-    }
-  }
+  it('should throw error if payload has invalid data type', () => {
+    const payload = {
+      id: 123,
+      commentId: 999,
+      content: 145,
+      date: {},
+      username: {},
+      isDeleted: 0,
+    };
 
-  _isPayloadNotContainNeededProperty({ commentId, owner, content }) {
-    return (!commentId || !owner || !content);
-  }
+    // action & assert
+    expect(() => new DetailReply(payload)).toThrowError('DETAIL_REPLY.NOT_MEET_DATA_TYPE_SPECIFICATION');
+  });
 
-  _isPayloadNotMeetDataTypeSpecification({ commentId, owner, content }) {
-    return (
-      typeof commentId !== 'string'
-     || typeof owner !== 'string'
-     || typeof content !== 'string'
-    );
-  }
-}
+  it('should create AddedReply object properly', () => {
+    const payload = {
+      id: 'reply-123',
+      commentId: 'comment-123',
+      content: 'some reply',
+      date: '2021',
+      username: 'John Doe',
+      isDeleted: false,
+    };
 
-module.exports = NewReply;
+    const addedReply = new DetailReply(payload);
+    expect(addedReply.id).toEqual(payload.id);
+    expect(addedReply.content).toEqual(payload.content);
+    expect(addedReply.date).toEqual(payload.date);
+    expect(addedReply.username).toEqual(payload.username);
+    expect(addedReply.is_deleted).toEqual(payload.is_deleted);
+  });
+});
