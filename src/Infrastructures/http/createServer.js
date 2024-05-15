@@ -3,6 +3,9 @@ const ClientError = require('../../Commons/exceptions/ClientError');
 const DomainErrorTranslator = require('../../Commons/exceptions/DomainErrorTranslator');
 const users = require('../../Interfaces/http/api/users');
 const authentications = require('../../Interfaces/http/api/authentications');
+const threads = require('../../Interfaces/http/api/threads');
+const comments = require('../../Interfaces/http/api/comments');
+const replies = require('../../Interfaces/http/api/replies');
 
 const createServer = async (container) => {
   const server = Hapi.server({
@@ -17,6 +20,18 @@ const createServer = async (container) => {
     },
     {
       plugin: authentications,
+      options: { container },
+    },
+    {
+      plugin: threads,
+      options: { container },
+    },
+    {
+      plugin: comments,
+      options: { container },
+    },
+    {
+      plugin: replies,
       options: { container },
     },
   ]);
@@ -38,8 +53,8 @@ const createServer = async (container) => {
         newResponse.code(translatedError.statusCode);
         return newResponse;
       }
-
       // mempertahankan penanganan client error oleh hapi secara native, seperti 404, etc.
+      console.log(response.message);
       if (!translatedError.isServer) {
         return h.continue;
       }
