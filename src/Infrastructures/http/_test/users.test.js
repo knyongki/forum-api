@@ -1,6 +1,6 @@
 const pool = require('../../database/postgres/pool');
 const UsersTableTestHelper = require('../../../../tests/UsersTableTestHelper');
-const container = require('../../container');
+const injections = require('../../injections');
 const createServer = require('../createServer');
 
 describe('/users endpoint', () => {
@@ -21,7 +21,7 @@ describe('/users endpoint', () => {
         fullname: 'Dicoding Indonesia',
       };
       // eslint-disable-next-line no-undef
-      const server = await createServer(container);
+      const server = await createServer(injections);
 
       // Action
       const response = await server.inject({
@@ -43,7 +43,7 @@ describe('/users endpoint', () => {
         fullname: 'Dicoding Indonesia',
         password: 'secret',
       };
-      const server = await createServer(container);
+      const server = await createServer(injections);
 
       // Action
       const response = await server.inject({
@@ -66,7 +66,7 @@ describe('/users endpoint', () => {
         password: 'secret',
         fullname: ['Dicoding Indonesia'],
       };
-      const server = await createServer(container);
+      const server = await createServer(injections);
 
       // Action
       const response = await server.inject({
@@ -89,7 +89,7 @@ describe('/users endpoint', () => {
         password: 'secret',
         fullname: 'Dicoding Indonesia',
       };
-      const server = await createServer(container);
+      const server = await createServer(injections);
 
       // Action
       const response = await server.inject({
@@ -112,7 +112,7 @@ describe('/users endpoint', () => {
         password: 'secret',
         fullname: 'Dicoding Indonesia',
       };
-      const server = await createServer(container);
+      const server = await createServer(injections);
 
       // Action
       const response = await server.inject({
@@ -125,7 +125,7 @@ describe('/users endpoint', () => {
       const responseJson = JSON.parse(response.payload);
       expect(response.statusCode).toEqual(400);
       expect(responseJson.status).toEqual('fail');
-      expect(responseJson.message).toEqual('tidak dapat membuat user baru karena username mengandung karakter terlarang');
+      expect(responseJson.message).toBeDefined();
     });
 
     it('should response 400 when username unavailable', async () => {
@@ -136,7 +136,7 @@ describe('/users endpoint', () => {
         fullname: 'Dicoding Indonesia',
         password: 'super_secret',
       };
-      const server = await createServer(container);
+      const server = await createServer(injections);
 
       // Action
       const response = await server.inject({

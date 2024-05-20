@@ -1,6 +1,6 @@
-const RegisterUser = require('../RegisterUser');
+const NewUser = require('../NewUser');
 
-describe('a RegisterUser entities', () => {
+describe('a NewUser entities', () => {
   it('should throw error when payload did not contain needed property', () => {
     // Arrange
     const payload = {
@@ -9,7 +9,7 @@ describe('a RegisterUser entities', () => {
     };
 
     // Action and Assert
-    expect(() => new RegisterUser(payload)).toThrowError('REGISTER_USER.NOT_CONTAIN_NEEDED_PROPERTY');
+    expect(() => new NewUser(payload)).toThrowError('NEW_USER.NOT_CONTAIN_NEEDED_PROPERTY');
   });
 
   it('should throw error when payload did not meet data type specification', () => {
@@ -21,7 +21,7 @@ describe('a RegisterUser entities', () => {
     };
 
     // Action and Assert
-    expect(() => new RegisterUser(payload)).toThrowError('REGISTER_USER.NOT_MEET_DATA_TYPE_SPECIFICATION');
+    expect(() => new NewUser(payload)).toThrowError('NEW_USER.NOT_MEET_DATA_TYPE_SPECIFICATION');
   });
 
   it('should throw error when username contains more than 50 character', () => {
@@ -33,7 +33,7 @@ describe('a RegisterUser entities', () => {
     };
 
     // Action and Assert
-    expect(() => new RegisterUser(payload)).toThrowError('REGISTER_USER.USERNAME_LIMIT_CHAR');
+    expect(() => new NewUser(payload)).toThrowError('NEW_USER.USERNAME_LIMIT_CHAR');
   });
 
   it('should throw error when username contains restricted character', () => {
@@ -45,10 +45,10 @@ describe('a RegisterUser entities', () => {
     };
 
     // Action and Assert
-    expect(() => new RegisterUser(payload)).toThrowError('REGISTER_USER.USERNAME_CONTAIN_RESTRICTED_CHARACTER');
+    expect(() => new NewUser(payload)).toThrowError('NEW_USER.USERNAME_CONTAIN_RESTRICTED_CHARACTER');
   });
 
-  it('should create registerUser object correctly', () => {
+  it('should create newUser object correctly', () => {
     // Arrange
     const payload = {
       username: 'dicoding',
@@ -57,7 +57,7 @@ describe('a RegisterUser entities', () => {
     };
 
     // Action
-    const { username, fullname, password } = new RegisterUser(payload);
+    const { username, fullname, password } = new NewUser(payload);
 
     // Assert
     expect(username).toEqual(payload.username);

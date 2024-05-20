@@ -15,7 +15,7 @@ const AuthenticationRepositoryPostgres = require('./repository/AuthenticationRep
 const ThreadRepositoryPostgres = require('./repository/ThreadRepositoryPostgres');
 const CommentRepositoryPostgres = require('./repository/CommentRepositoryPostgres');
 const ReplyRepositoryPostgres = require('./repository/ReplyRepositoryPostgres');
-const BcryptEncryptionHelper = require('./security/BcryptPasswordHash');
+const BcryptEncryptionHelper = require('./security/BcryptEncryptionHelper');
 const JwtTokenManager = require('./security/JwtTokenManager');
 
 // use case
@@ -23,7 +23,7 @@ const AddUserUseCase = require('../Applications/use_case/AddUserUseCase');
 const LoginUserUseCase = require('../Applications/use_case/LoginUserUseCase');
 const RefreshAuthenticationUseCase = require('../Applications/use_case/RefreshAuthenticationUseCase');
 const LogoutUserUseCase = require('../Applications/use_case/LogoutUserUseCase');
-const AddthreadUseCase = require('../Applications/use_case/AddThreadUseCase');
+const AddThreadUseCase = require('../Applications/use_case/AddThreadUseCase');
 const AddCommentUseCase = require('../Applications/use_case/AddCommentUseCase');
 const DeleteCommentUseCase = require('../Applications/use_case/DeleteCommentUseCase');
 const GetThreadUseCase = require('../Applications/use_case/GetThreadUseCase');
@@ -58,7 +58,7 @@ const useCaseInstanceContainer = {
   logoutUserUseCase: new LogoutUserUseCase({
     authenticationRepository: serviceInstanceContainer.authenticationRepository,
   }),
-  addThreadUseCase: new AddthreadUseCase({
+  addThreadUseCase: new AddThreadUseCase({
     threadRepository: serviceInstanceContainer.threadRepository,
     authenticationTokenManager: serviceInstanceContainer.authenticationTokenManager,
   }),

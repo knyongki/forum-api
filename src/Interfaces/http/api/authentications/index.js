@@ -3,8 +3,8 @@ const AuthenticationsHandler = require('./handler');
 
 module.exports = {
   name: 'authentications',
-  register: async (server, { container }) => {
-    const authenticationsHandler = new AuthenticationsHandler(container);
+  register: async (server, { injections }) => {
+    const authenticationsHandler = new AuthenticationsHandler(injections);
     server.route(routes(authenticationsHandler));
   },
 };

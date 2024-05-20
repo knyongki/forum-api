@@ -29,7 +29,6 @@ describe('GetThreadDetailUseCase', () => {
         content: 'comment A',
         replies: [],
         isDeleted: false,
-        likeCount: 0,
       }),
       new DetailComment({
         id: 'comment-456',
@@ -38,7 +37,6 @@ describe('GetThreadDetailUseCase', () => {
         content: 'comment B',
         replies: [],
         isDeleted: false,
-        likeCount: 0,
       }),
     ];
 
@@ -75,7 +73,6 @@ describe('GetThreadDetailUseCase', () => {
     const getThreadDetailUseCase = new GetThreadUseCase({
       threadRepository: mockThreadRepository,
       commentRepository: mockCommentRepository,
-      likeRepository: {},
     });
 
     // filtering retrievedComments to remove isDeleted and likeCount
@@ -109,14 +106,10 @@ describe('GetThreadDetailUseCase', () => {
     getThreadDetailUseCase._getRepliesForComments = jest.fn()
       .mockImplementation(() => expectedCommentsAndReplies);
 
-    getThreadDetailUseCase._getLikeCountForComments = jest.fn()
-      .mockImplementation(() => Promise.resolve(expectedCommentsAndReplies));
-
     // action
     const useCaseResult = await getThreadDetailUseCase.execute(useCaseParam);
 
     // assert
-
     expect(useCaseResult).toEqual(new DetailThread({
       ...expectedDetailThread, comments: expectedCommentsAndReplies,
     }));
@@ -127,14 +120,12 @@ describe('GetThreadDetailUseCase', () => {
     expect(getThreadDetailUseCase._checkIsDeletedComments).toBeCalledWith(retrievedComments);
     expect(getThreadDetailUseCase._getRepliesForComments)
       .toBeCalledWith([filteredCommentDetailsA, filteredCommentDetailsB], retrievedReplies);
-    expect(getThreadDetailUseCase._getLikeCountForComments)
-      .toBeCalledWith(expectedCommentsAndReplies);
   });
 
   it('should operate the branching in the _checkIsDeletedComments function properly', () => {
     // arrange
     const getThreadDetailUseCase = new GetThreadUseCase(
-      { threadRepository: {}, commentRepository: {}, likeRepository: {} },
+      { threadRepository: {}, commentRepository: {} },
     );
     const retrievedComments = [
       new DetailComment({
@@ -144,7 +135,6 @@ describe('GetThreadDetailUseCase', () => {
         content: 'comment A',
         replies: [],
         isDeleted: true,
-        likeCount: 0,
       }),
       new DetailComment({
         id: 'comment-456',
@@ -153,7 +143,6 @@ describe('GetThreadDetailUseCase', () => {
         content: 'comment B',
         replies: [],
         isDeleted: false,
-        likeCount: 0,
       }),
     ];
     const {
@@ -181,7 +170,7 @@ describe('GetThreadDetailUseCase', () => {
   it('should operate the branching in the _getRepliesForComments function properly', () => {
     // arrange
     const getThreadDetailUseCase = new GetThreadUseCase(
-      { threadRepository: {}, commentRepository: {}, likeRepository: {} },
+      { threadRepository: {}, commentRepository: {} },
     );
     const filteredComments = [
       {
@@ -190,7 +179,6 @@ describe('GetThreadDetailUseCase', () => {
         date: '2021',
         content: '**komentar telah dihapus**',
         replies: [],
-        likeCount: 0,
       },
       {
         id: 'comment-456',
@@ -198,7 +186,6 @@ describe('GetThreadDetailUseCase', () => {
         date: '2020',
         content: 'comment B',
         replies: [],
-        likeCount: 0,
       },
     ];
 
@@ -246,46 +233,5 @@ describe('GetThreadDetailUseCase', () => {
       .toReturnWith(expectedCommentsAndReplies);
 
     SpyGetRepliesForComments.mockClear();
-  });
-
-  it('should operate the _getLikeCountForComments function properly', async () => {
-    // arrange
-    const commentsParam = [
-      {
-        id: 'comment-123',
-        username: 'user A',
-        date: '2021',
-        content: '**komentar telah dihapus**',
-        replies: [{
-          id: 'reply-123',
-          content: 'reply A',
-          date: '2021',
-          username: 'user C',
-        }],
-        likeCount: 0,
-      },
-      {
-        id: 'comment-456',
-        username: 'user B',
-        date: '2020',
-        content: 'comment B',
-        replies: [{
-          id: 'reply-456',
-          content: 'reply B',
-          date: '2021',
-          username: 'user D',
-        }],
-        likeCount: 0,
-      },
-    ];
-
-    const expectedComments = [
-      {
-        ...commentsParam[0], likeCount: 2,
-      },
-      {
-        ...commentsParam[1], likeCount: 0,
-      },
-    ];
   });
 });

@@ -1,10 +1,12 @@
-const LoginUserUseCase = require('../../../../Applications/use_case/LoginUserUseCase');
-const RefreshAuthenticationUseCase = require('../../../../Applications/use_case/RefreshAuthenticationUseCase');
-const LogoutUserUseCase = require('../../../../Applications/use_case/LogoutUserUseCase');
-
 class AuthenticationsHandler {
-  constructor(container) {
-    this._container = container;
+  constructor({
+    loginUserUseCase,
+    refreshAuthenticationUseCase,
+    logoutUserUseCase,
+  }) {
+    this._loginUserUseCase = loginUserUseCase;
+    this._refreshAuthenticationUseCase = refreshAuthenticationUseCase;
+    this._logoutUserUseCase = logoutUserUseCase;
 
     this.postAuthenticationHandler = this.postAuthenticationHandler.bind(this);
     this.putAuthenticationHandler = this.putAuthenticationHandler.bind(this);
@@ -12,8 +14,7 @@ class AuthenticationsHandler {
   }
 
   async postAuthenticationHandler(request, h) {
-    const loginUserUseCase = this._container.getInstance(LoginUserUseCase.name);
-    const { accessToken, refreshToken } = await loginUserUseCase.execute(request.payload);
+    const { accessToken, refreshToken } = await this._loginUserUseCase.execute(request.payload);
     const response = h.response({
       status: 'success',
       data: {
@@ -26,9 +27,8 @@ class AuthenticationsHandler {
   }
 
   async putAuthenticationHandler(request) {
-    const refreshAuthenticationUseCase = this._container
-      .getInstance(RefreshAuthenticationUseCase.name);
-    const accessToken = await refreshAuthenticationUseCase.execute(request.payload);
+    const accessToken = await this._refreshAuthenticationUseCase
+      .execute(request.payload);
 
     return {
       status: 'success',
@@ -39,8 +39,7 @@ class AuthenticationsHandler {
   }
 
   async deleteAuthenticationHandler(request) {
-    const logoutUserUseCase = this._container.getInstance(LogoutUserUseCase.name);
-    await logoutUserUseCase.execute(request.payload);
+    await this._logoutUserUseCase.execute(request.payload);
     return {
       status: 'success',
     };

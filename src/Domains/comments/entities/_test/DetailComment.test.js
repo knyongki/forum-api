@@ -8,7 +8,6 @@ describe('a DetailComment entity', () => {
       date: 'thread-123,',
       content: 'some comment',
       replies: [],
-      likeCount: 0,
       isDeleted: false,
     };
 
@@ -18,7 +17,6 @@ describe('a DetailComment entity', () => {
     expect(detailComment.date).toEqual(payload.date);
     expect(detailComment.content).toEqual(payload.content);
     expect(detailComment.replies).toEqual(payload.replies);
-    expect(detailComment.likeCount).toEqual(payload.likeCount);
     expect(detailComment.isDeleted).toEqual(payload.isDeleted);
   });
 
@@ -41,7 +39,6 @@ describe('a DetailComment entity', () => {
       date: 2021,
       content: { content: 'some content' },
       replies: 'replies',
-      likeCount: '0',
       isDeleted: 'false',
     };
 

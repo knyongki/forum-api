@@ -1,16 +1,23 @@
 const bcrypt = require('bcrypt');
+const EncryptionHelper = require('../../../Applications/security/EncryptionHelper');
 const AuthenticationError = require('../../../Commons/exceptions/AuthenticationError');
-const BcryptEncryptionHelper = require('../BcryptPasswordHash');
+const BcryptEncryptionHelper = require('../BcryptEncryptionHelper');
 
 describe('BcryptEncryptionHelper', () => {
-  describe('hash function', () => {
+  it('should be instance of EncryptionHelper', () => {
+    const bcryptEncryptionHelper = new BcryptEncryptionHelper({}); // dummy bcrypt
+
+    expect(bcryptEncryptionHelper).toBeInstanceOf(EncryptionHelper);
+  });
+
+  describe('encryptPassword function', () => {
     it('should encrypt password correctly', async () => {
       // Arrange
       const spyHash = jest.spyOn(bcrypt, 'hash');
       const bcryptEncryptionHelper = new BcryptEncryptionHelper(bcrypt);
 
       // Action
-      const encryptedPassword = await bcryptEncryptionHelper.hash('plain_password');
+      const encryptedPassword = await bcryptEncryptionHelper.encryptPassword('plain_password');
 
       // Assert
       expect(typeof encryptedPassword).toEqual('string');
@@ -34,7 +41,7 @@ describe('BcryptEncryptionHelper', () => {
       // Arrange
       const bcryptEncryptionHelper = new BcryptEncryptionHelper(bcrypt);
       const plainPassword = 'secret';
-      const encryptedPassword = await bcryptEncryptionHelper.hash(plainPassword);
+      const encryptedPassword = await bcryptEncryptionHelper.encryptPassword(plainPassword);
 
       // Act & Assert
       await expect(bcryptEncryptionHelper.comparePassword(plainPassword, encryptedPassword))

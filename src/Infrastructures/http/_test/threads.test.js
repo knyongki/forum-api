@@ -4,7 +4,7 @@ const ThreadableTestHelper = require('../../../../tests/ThreadsTableTestHelper')
 const AuthenticationsTableTestHelper = require('../../../../tests/AuthenticationsTableTestHelper');
 const CommentsTableTestHelper = require('../../../../tests/CommentsTableTestHelper');
 const ServerTestHelper = require('../../../../tests/ServerTestHelper');
-const container = require('../../container');
+const injections = require('../../injections');
 const createServer = require('../createServer');
 const RepliesTableTestHelper = require('../../../../tests/RepliesTableTestHelper');
 
@@ -30,7 +30,7 @@ describe('endpoints concerning CRUD on threads', () => {
         body: 'dolor sit amet',
       };
 
-      const server = await createServer(container);
+      const server = await createServer(injections);
 
       /* add user and gain access token */
       const { accessToken } = await ServerTestHelper.getAccessTokenAndUserIdHelper({ server });
@@ -64,7 +64,7 @@ describe('endpoints concerning CRUD on threads', () => {
         body: 'dolor sit amet',
       };
 
-      const server = await createServer(container);
+      const server = await createServer(injections);
 
       // action
       const response = await server.inject({
@@ -86,7 +86,7 @@ describe('endpoints concerning CRUD on threads', () => {
         title: 'lorem ipsum',
       };
 
-      const server = await createServer(container);
+      const server = await createServer(injections);
 
       /* add user and gain access token */
       const { accessToken } = await ServerTestHelper.getAccessTokenAndUserIdHelper({ server });
@@ -115,7 +115,7 @@ describe('endpoints concerning CRUD on threads', () => {
         body: 123,
       };
 
-      const server = await createServer(container);
+      const server = await createServer(injections);
 
       /* add user and gain access token */
       const { accessToken } = await ServerTestHelper.getAccessTokenAndUserIdHelper({ server });
@@ -139,7 +139,7 @@ describe('endpoints concerning CRUD on threads', () => {
 
   describe('when GET /threads/{threadId}', () => {
     it('should respond with 200 with thread details and comments', async () => {
-      const server = await createServer(container);
+      const server = await createServer(injections);
 
       const threadId = 'thread-123';
       await UsersTableTestHelper.addUser({ id: 'user-123', username: 'JohnDoe' });
@@ -166,12 +166,10 @@ describe('endpoints concerning CRUD on threads', () => {
       expect(responseJson.data.thread.comments).toHaveLength(2);
       expect(responseJson.data.thread.comments[0].replies).toHaveLength(1);
       expect(responseJson.data.thread.comments[1].replies).toHaveLength(1);
-      expect(responseJson.data.thread.comments[0].likeCount).toEqual(1);
-      expect(responseJson.data.thread.comments[1].likeCount).toEqual(0);
     });
 
     it('should respond with 200 and with thread details with empty comments', async () => {
-      const server = await createServer(container);
+      const server = await createServer(injections);
 
       const threadId = 'thread-123';
       await UsersTableTestHelper.addUser({ id: 'user-123', username: 'John Doe' });
@@ -192,7 +190,7 @@ describe('endpoints concerning CRUD on threads', () => {
     });
 
     it('should respond with 404 if thread does not exist', async () => {
-      const server = await createServer(container);
+      const server = await createServer(injections);
 
       const response = await server.inject({
         method: 'GET',

@@ -1,5 +1,5 @@
 class UserRepository {
-  async addUser(registerUser) {
+  async addUser(newUser) {
     throw new Error('USER_REPOSITORY.METHOD_NOT_IMPLEMENTED');
   }
 

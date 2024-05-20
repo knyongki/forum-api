@@ -3,7 +3,7 @@ const UsersTableTestHelper = require('../../../../tests/UsersTableTestHelper');
 const ThreadableTestHelper = require('../../../../tests/ThreadsTableTestHelper');
 const AuthenticationsTableTestHelper = require('../../../../tests/AuthenticationsTableTestHelper');
 const ServerTestHelper = require('../../../../tests/ServerTestHelper');
-const container = require('../../container');
+const injections = require('../../injections');
 const createServer = require('../createServer');
 const CommentsTableTestHelper = require('../../../../tests/CommentsTableTestHelper');
 
@@ -27,7 +27,7 @@ describe('endpoints concerning CRUD on comments', () => {
         content: 'somekind of comment',
       };
 
-      const server = await createServer(container);
+      const server = await createServer(injections);
 
       /* login and add thread to get accessToken and threadId */
       const { accessToken, userId } = await ServerTestHelper
@@ -62,7 +62,7 @@ describe('endpoints concerning CRUD on comments', () => {
       /* add comment payload with bad specifications */
       const requestPayload = {};
 
-      const server = await createServer(container);
+      const server = await createServer(injections);
 
       /* login and add thread to get accessToken and threadId */
       const { accessToken, userId } = await ServerTestHelper
@@ -95,7 +95,7 @@ describe('endpoints concerning CRUD on comments', () => {
         content: 2021,
       };
 
-      const server = await createServer(container);
+      const server = await createServer(injections);
 
       /* login and add thread to get accessToken and threadId */
       const { accessToken, userId } = await ServerTestHelper
@@ -125,7 +125,7 @@ describe('endpoints concerning CRUD on comments', () => {
   describe('when DELETE /threads/{threadId}/comments/{commentId}', () => {
     it('should respond with 200 and return success status', async () => {
       // arrange
-      const server = await createServer(container);
+      const server = await createServer(injections);
 
       const { userId, accessToken } = await ServerTestHelper
         .getAccessTokenAndUserIdHelper({ server });
@@ -153,7 +153,7 @@ describe('endpoints concerning CRUD on comments', () => {
 
     it('should respond with 403 when someone tries to delete comment that they dont own', async () => {
     // arrange
-      const server = await createServer(container);
+      const server = await createServer(injections);
 
       /* create first user and their comment */
       const { accessToken: firstAccessToken, userId: firstUserId } = await ServerTestHelper

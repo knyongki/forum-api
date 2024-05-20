@@ -7,7 +7,7 @@ const threads = require('../../Interfaces/http/api/threads');
 const comments = require('../../Interfaces/http/api/comments');
 const replies = require('../../Interfaces/http/api/replies');
 
-const createServer = async (container) => {
+const createServer = async (injections) => {
   const server = Hapi.server({
     host: process.env.HOST,
     port: process.env.PORT,
@@ -16,23 +16,23 @@ const createServer = async (container) => {
   await server.register([
     {
       plugin: users,
-      options: { container },
+      options: { injections },
     },
     {
       plugin: authentications,
-      options: { container },
+      options: { injections },
     },
     {
       plugin: threads,
-      options: { container },
+      options: { injections },
     },
     {
       plugin: comments,
-      options: { container },
+      options: { injections },
     },
     {
       plugin: replies,
-      options: { container },
+      options: { injections },
     },
   ]);
 

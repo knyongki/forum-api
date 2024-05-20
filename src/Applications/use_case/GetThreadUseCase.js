@@ -1,11 +1,10 @@
 /* eslint-disable no-await-in-loop */
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-shadow */
-class getThreadUseCase {
-  constructor({ threadRepository, commentRepository, likeRepository }) {
+class GetThreadUseCase {
+  constructor({ threadRepository, commentRepository }) {
     this._threadRepository = threadRepository;
     this._commentRepository = commentRepository;
-    this._likeRepository = likeRepository;
   }
 
   async execute(useCaseParam) {
@@ -16,7 +15,6 @@ class getThreadUseCase {
 
     threadDetail.comments = this._checkIsDeletedComments(threadDetail.comments);
     threadDetail.comments = this._getRepliesForComments(threadDetail.comments, threadReplies);
-    threadDetail.comments = await this._getLikeCountForComments(threadDetail.comments);
 
     return threadDetail;
   }
@@ -43,15 +41,6 @@ class getThreadUseCase {
     }
     return comments;
   }
-
-  async _getLikeCountForComments(comments) {
-    for (let i = 0; i < comments.length; i += 1) {
-      const commentId = comments[i].id;
-      comments[i].likeCount = await this._likeRepository
-        .getLikeCountByCommentId(commentId);
-    }
-    return comments;
-  }
 }
 
-module.exports = getThreadUseCase;
+module.exports = GetThreadUseCase;

@@ -1,17 +1,17 @@
-const RegisterUser = require('../../Domains/users/entities/RegisterUser');
+const NewUser = require('../../Domains/users/entities/NewUser');
 
-class AddUserUseCase {
-  constructor({ userRepository, passwordHash }) {
+class AddedUserUseCase {
+  constructor({ userRepository, encryptionHelper }) {
     this._userRepository = userRepository;
-    this._passwordHash = passwordHash;
+    this._encryptionHelper = encryptionHelper;
   }
 
   async execute(useCasePayload) {
-    const registerUser = new RegisterUser(useCasePayload);
-    await this._userRepository.verifyAvailableUsername(registerUser.username);
-    registerUser.password = await this._passwordHash.hash(registerUser.password);
-    return this._userRepository.addUser(registerUser);
+    const newUser = new NewUser(useCasePayload);
+    await this._userRepository.verifyAvailableUsername(newUser.username);
+    newUser.password = await this._encryptionHelper.encryptPassword(newUser.password);
+    return this._userRepository.addUser(newUser);
   }
 }
 
-module.exports = AddUserUseCase;
+module.exports = AddedUserUseCase;

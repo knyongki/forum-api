@@ -22,7 +22,7 @@ describe('HTTP server', () => {
       fullname: 'Dicoding Indonesia',
       password: 'super_secret',
     };
-    const server = await createServer({});
+    const server = await createServer({}); // fake injection
 
     // Action
     const response = await server.inject({

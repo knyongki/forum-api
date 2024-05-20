@@ -3,8 +3,8 @@ const routes = require('./routes');
 
 module.exports = {
   name: 'comments',
-  register: async (server, { container }) => {
-    const commentsHandler = new CommentsHandler(container);
+  register: async (server, { injections }) => {
+    const commentsHandler = new CommentsHandler(injections);
     server.route(routes(commentsHandler));
   },
 };
